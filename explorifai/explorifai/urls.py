@@ -16,7 +16,11 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
+from explorifai_app.views import *
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
+    path("", HomePageView.as_view(), name="home"),             # change to as_view later?
+    path("about/", AboutPageView, name="about"),
+    path("explore/", WorldPageView, name="explore"),
+    path('admin/', admin.site.urls),                           # not setup yet.
 ]

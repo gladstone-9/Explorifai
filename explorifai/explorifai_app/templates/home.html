@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        {% load static %}
+        {% load bootstrap5 %}
+        {% bootstrap_css %}
+        {% bootstrap_javascript %}
+
+        <style>
+            .title-card {
+                width: 100vw;
+                height: 80vh;
+                position: relative;
+                margin: 0;
+                padding-left: 0;
+                padding-right: 0;
+            }
+            .center {
+                /* Center Text on Image */
+                margin: 0;
+                position: absolute;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                text-align: center;
+                background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent black background */
+                padding: 20px; /* Padding around the text */
+                color: white; /* Text color */
+            }
+        </style>
+
+        <title>ExplorifAi</title>
+    </head>
+
+    <body>
+        <div class="title-card">
+            <img src="{% static 'landmarks.jpg' %}" style="width:100vw;height:100vh;">
+            <div class="center">
+                <h2>Welcome to ExplorifAi</h2>
+            </div>
+        </div>  
+        
+        <!-- Footer -->
+        {% include "footer.html" %}
+    </body>
+
+</html>
