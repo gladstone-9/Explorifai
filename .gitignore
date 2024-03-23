@@ -1,6 +1,4 @@
 # Django #
-hf.env
-Constants*
 env
 *.log
 *.pot
