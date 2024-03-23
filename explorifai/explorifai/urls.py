@@ -20,7 +20,7 @@ from explorifai_app.views import *
 
 urlpatterns = [
     path("", HomePageView.as_view(), name="home"),             # change to as_view later?
-    path("about/", AboutPageView, name="about"),
-    path("explore/", WorldPageView, name="explore"),
+    path("about/", AboutPageView.as_view(), name="about"),
+    path("explore/", WorldPageView.as_view(), name="explore"),
     path('admin/', admin.site.urls),                           # not setup yet.
 ]
