@@ -15,7 +15,7 @@ from django.db import models
 class Location(models.Model):
     title = models.CharField(max_length=200)
     address = models.CharField(max_length=200)
-    description = models.CharField(max_length=400, default="")
+    description = models.CharField(max_length=2000, default="Pending...")
     lat = models.DecimalField(decimal_places=25, max_digits=25)
     long = models.DecimalField(decimal_places=25, max_digits=25)
 
