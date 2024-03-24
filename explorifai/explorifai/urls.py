@@ -23,4 +23,6 @@ urlpatterns = [
     path("about/", AboutPageView.as_view(), name="about"),
     path("explore/", WorldPageView.as_view(), name="explore"),
     path('admin/', admin.site.urls),                           # not setup yet.
+    path('process_address/', process_address, name='process_address'),
+
 ]

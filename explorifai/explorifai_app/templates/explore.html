@@ -9,12 +9,30 @@
         <title>ExplorifAi</title>
 
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
-        <!-- <script async="false" defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBLBOIk799y5zyOxYuWWmIoDBwnn66I4zU&libraries=maps&callback=initMap"></script> -->
-        <script async="false" defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA12FMtU13I1BQQ0Qct4HmKHYOdq1AJelY&libraries=marker,maps,geocoding&callback=initMap"></script>
+        <script async="false" defer src="https://maps.googleapis.com/maps/api/js?key=&libraries=marker,maps,geocoding&callback=initMap"></script>
 
         <style>
             #search_map {
-                height: 80%;
+                height: 90%;
+                position: relative;
+                bottom: 0;
+                left: 0;
+                right: 0;
+                z-index: 1; 
+            }
+
+            .toast {
+                position: fixed; 
+                top: 10px; 
+                right: 10px;
+                min-height: 100px;
+                backdrop-filter: blur(10px);
+                z-index: 1000; 
+            }
+
+            .toast-header {
+                background-color: #004d7a;
+                color: #fff;
             }
         </style>
     </head>
@@ -23,9 +41,6 @@
         <!-- Navigation Bar -->
         {% include "navbar.html" %}
 
-        <!-- Main HTML -->
-
-        <div class="d-flex" style="position: relative; z-index: 1;" id="search_map"></div>
 
         <!-- <input id="latlng" type="text" value="40.714224,-73.961452" /> -->
 
@@ -42,6 +57,27 @@
             </div>
         </div>
 
+        <!-- Toast Popup -->
+        <div class="toast-container position-fixed bottom-0 end-0 p-3">
+            <div id="liveToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+              <div class="toast-header">
+                <img src="{% static 'magnifying_glass.jpg' %}" class="rounded me-2" alt="..." style="width:2vw;height:3vh;">
+                <strong class="me-auto">Location Discovered</strong>
+                <small>Ready!</small>
+                <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+              </div>
+              <div class="toast-body">
+                <!-- This location has been discovered. -->
+              </div>
+            </div>
+        </div>
+
+        <!-- Main HTML -->
+
+        <!-- <div id="map-container"> -->
+            <div class="d-flex" id="search_map"></div>
+        <!-- </div> -->
+
         <!-- Map JS -->
         <script>
             let map;
@@ -57,7 +93,7 @@
                 map = new google.maps.Map(document.getElementById('search_map'), {
                     zoom: 14,
                     center: UVA,
-                    mapid: 'f7224c01abec6617',
+                    mapid: '',
                     // mapId: '1762bfc6a30416d6', // DEMO_MAP_ID for testing
                     
                 });
@@ -154,6 +190,7 @@
                         //     map: map,
                         // });
                         marker.address = "Address: " + response.results[0].formatted_address;
+                        sendAddressToDjango(marker.address);
                         // infowindow.setContent(response.results[0].formatted_address);
                         // infowindow.open(map, marker);
                     } else {
@@ -161,7 +198,40 @@
                     }
                     })
                     .catch((e) => window.alert("Geocoder failed due to: " + e));
+
+                function sendAddressToDjango(address) {
+                    // const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+
+                    fetch('/process_address/', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            // 'X-CSRFToken': csrfToken,
+                        },
+                        body: JSON.stringify({ address: address }),
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        // Handle the response from Django
+                        const parsedData = JSON.parse(data.processed_data);
+                        updatePage(parsedData.historical_description);
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                    });
                 }
+
+                function updatePage(description) {
+                    // Update the page with the processed data from Django
+                    
+                    // Toast Notification 
+                    // const toastLiveExample = document.getElementById('liveToast');
+                    // const toastBootstrap = bootstrap.Toast.getOrCreateInstance(toastLiveExample);
+                    // toastBootstrap.show();
+
+                    marker.description = description;
+                }
+            }
         </script>
 
         

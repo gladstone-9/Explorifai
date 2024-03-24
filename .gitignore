@@ -1,4 +1,5 @@
 # Django #
+migrations*
 hf.env
 Constants*
 env
